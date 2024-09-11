@@ -17,13 +17,13 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        inputMovement = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        inputMovement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
     }
 
     void FixedUpdate()
@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
         //    rb.MovePosition(transform.position + new Vector3(inputMovement.x, inputMovement.y, 0) * Time.deltaTime * speed);
         //    Debug.Log("Not diagonally");
         //}
-            rb.MovePosition(transform.position + new Vector3(inputMovement.x, inputMovement.y, 0) * Time.deltaTime * speed);
+        rb.MovePosition(transform.position + new Vector3(inputMovement.x, inputMovement.y, 0) * Time.deltaTime * speed);
     }
 
     private Vector2 NormalizeDiagonal(Vector2 diagonalVector)
