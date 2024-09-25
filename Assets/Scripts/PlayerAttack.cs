@@ -4,34 +4,39 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    public GameObject attackPoint;
-    [SerializeField] private float radius;
-    [SerializeField] private LayerMask Enemy;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
+    [SerializeField] private SpriteRenderer _attackSprite;
+    [SerializeField] private float _radius;
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetMouseButtonDown(0)) Attack();
     }
 
-    public void attack()
+    public void Attack()
     {
-        Collider2D[] enemy = Physics2D.OverlapCircleAll(attackPoint.transform.position, radius, Enemy);
+        StartCoroutine(ShowSwordArea());
 
-        foreach (Collider2D enemyGameobject in enemy)
+        Collider2D[] objects = Physics2D.OverlapCircleAll(_attackSprite.transform.position, _radius);
+
+        foreach (Collider2D enemyGameobject in objects)
         {
-
+            if (enemyGameobject.gameObject.CompareTag("Enemy"))
+            {
+                enemyGameobject.gameObject.GetComponent<Enemy>().ReceiveDamage(10);
+            }
         }
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(attackPoint.transform.position, radius);
+        Gizmos.DrawWireSphere(_attackSprite.transform.position, _radius);
+    }
+
+    private IEnumerator ShowSwordArea()
+    {
+        _attackSprite.enabled = true;
+        yield return new WaitForSeconds(0.05f);
+        _attackSprite.enabled = false;
     }
 }

@@ -1,35 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Search;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private Camera _cameraScript;
-    [SerializeField] float speed;
+    [SerializeField] float _speed;
+    [SerializeField] float _dashSpeed;
+    [SerializeField] private float _dashCD; //Colldown between dashes.
+    [SerializeField] private float _dashTime; //Dash duration.
 
-    private Rigidbody2D rb;
-    private Vector2 inputMovement;
+    private Rigidbody2D _rb;
+    private Vector2 _inputMovement;
+
+    private bool _canDash = true;
+
 
     void Awake()
     {
-
-        rb = GetComponent<Rigidbody2D>();
-
-    }
-
-    void Start()
-    {
-        
+        _rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        _inputMovement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized; //Input movement.
 
-        inputMovement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+        if (Input.GetKeyDown(KeyCode.Space) && _canDash) //If player presses space, he dashes.
+        {
+            Dash();
+        }
 
-
-
+        if (_inputMovement.magnitude != 0)
+        {
+            transform.rotation = (_inputMovement.x > 0) ? Quaternion.identity : Quaternion.Euler(0, 180, 0);
+        }
     }
 
     void FixedUpdate()
@@ -37,16 +44,32 @@ public class PlayerMovement : MonoBehaviour
         ManageMovement();
     }
 
-    void ManageMovement()
+    private void Dash() //Player dashes.
     {
-        rb.MovePosition(transform.position + new Vector3(inputMovement.x, inputMovement.y, 0) * Time.deltaTime * speed);
+        _canDash = false;
+        GetComponent<CapsuleCollider2D>().enabled = false;
+        _speed *= _dashSpeed;
+        StartCoroutine(DashTime(_dashTime));
     }
 
-    private Vector2 NormalizeDiagonal(Vector2 diagonalVector)
+    private IEnumerator DashTime(float dashDuration) //Dash duration time.
     {
-        inputMovement.SqrMagnitude();
-        return inputMovement;
+        yield return new WaitForSeconds(dashDuration);
+        _speed /= _dashSpeed;
+        GetComponent<CapsuleCollider2D>().enabled = true;
+        StartCoroutine(DashCD(_dashCD));
     }
+
+    private IEnumerator DashCD(float dashCD) //Dash cooldown time.
+    {
+        yield return new WaitForSeconds(dashCD);
+        _canDash = true;
+    }
+
+    private void ManageMovement()
+    {
+        _rb.MovePosition(transform.position + new Vector3(_inputMovement.x, _inputMovement.y, 0) * Time.deltaTime * _speed);
+    } //Player movement.
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
