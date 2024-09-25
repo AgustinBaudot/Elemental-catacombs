@@ -10,15 +10,6 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 inputMovement;
 
-    private bool _canDash = true;
-    private bool _isDashing;
-    private float _dashingTime = 0.2f;
-    private float _dashingCooldown = 0.2f;
-    [SerializeField] private float _dashingForce = 5f;
-
-
-
-
     void Awake()
     {
 
@@ -28,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -37,10 +28,8 @@ public class PlayerMovement : MonoBehaviour
 
         inputMovement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
-        if(Input.GetKeyDown(KeyCode.LeftShift) && _canDash) 
-        {
-            StartCoroutine(Dash());
-        }
+
+
     }
 
     void FixedUpdate()
@@ -80,19 +69,5 @@ public class PlayerMovement : MonoBehaviour
                 _cameraScript.MoveCamera(Vector2.right);
             }
         }
-    }
-
-    private IEnumerator Dash()
-    {
-        _canDash = false;
-        _isDashing = true;
-        float originalGravity = rb.gravityScale;
-        rb.gravityScale = 0;
-        rb.velocity = new Vector2(transform.localScale.x * _dashingForce, 0);
-        yield return new WaitForSeconds(_dashingTime);
-        rb.gravityScale = originalGravity;
-        _isDashing = false;
-        yield return new WaitForSeconds(_dashingCooldown);
-        _canDash = true;
     }
 }
