@@ -7,18 +7,15 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private Camera _cameraScript;
-    [SerializeField] float _speed;
-    [SerializeField] float _dashSpeed;
-    [SerializeField] private float _dashCD; //Colldown between dashes.
-    [SerializeField] private float _dashTime; //Dash duration.
-    [SerializeField] private float _potions;
+    [SerializeField] private float _speed, _dashSpeed; //Normal moving speed and dashing speed;
+    [SerializeField] private float _dashCD, _dashTime; //Colldown between dashes & dash duration;
+    public int _potions;
 
     private Rigidbody2D _rb;
     private Vector2 _inputMovement;
     [SerializeField] private Animator _anim;
 
     private bool _canDash = true;
-
 
     void Awake()
     {
@@ -40,19 +37,19 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = (_inputMovement.x > 0) ? Quaternion.identity : Quaternion.Euler(0, 180, 0);
         }
 
+        _anim.speed = (HitStopManager._instance.IsStopped()) ? 0 : 1; //Set animation time to 0 if time is stopped.
         ManageAnimations();
-
     }
 
     void FixedUpdate()
     {
-        ManageMovement();
+        if (!HitStopManager._instance.IsStopped()) ManageMovement();
     }
 
     private void Dash() //Player dashes.
     {
         _canDash = false;
-        GetComponent<CapsuleCollider2D>().enabled = false;
+        Physics2D.IgnoreLayerCollision(0, 7, true);
         _speed *= _dashSpeed;
         StartCoroutine(DashTime(_dashTime));
     }
@@ -61,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(dashDuration);
         _speed /= _dashSpeed;
-        GetComponent<CapsuleCollider2D>().enabled = true;
+        Physics2D.IgnoreLayerCollision(0, 7, false);
         StartCoroutine(DashCD(_dashCD));
     }
 
@@ -103,7 +100,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Loot"))
         {
-            _potions += 1;
+            _potions ++;
             Destroy(collision.gameObject);
         }
     }
