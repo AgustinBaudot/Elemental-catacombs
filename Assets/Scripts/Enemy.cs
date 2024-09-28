@@ -9,6 +9,9 @@ public class Enemy : MonoBehaviour
     protected string _type, _element;
     [SerializeField] protected GameObject _player;
     [SerializeField] protected EnemyState _enemyState;
+
+    public List<LootItem> _lootTable = new List<LootItem>();
+
     protected enum EnemyState { Persuing, Attacking };
 
     public virtual void Init()
@@ -49,6 +52,7 @@ public class Enemy : MonoBehaviour
         if (_hp <= 0)
         {
             Dies();
+            DropLoot();
         }
     }
 
@@ -62,5 +66,25 @@ public class Enemy : MonoBehaviour
     {
         _enemyState = EnemyState.Persuing;
         //Attack;
+    }
+
+    public virtual void DropLoot()
+    {
+        foreach (LootItem lootItem in _lootTable)
+        {
+
+            float randomValue = Random.Range(0f, 1f);
+            if (randomValue <= lootItem.dropChance)
+            {
+                Instantiate(lootItem._lootPrefab, transform.position, Quaternion.identity);
+            }
+        }
+    }
+
+    [System.Serializable]
+    public class LootItem
+    {
+        public GameObject _lootPrefab;
+        [Range(0f, 1f)] public float dropChance;
     }
 }

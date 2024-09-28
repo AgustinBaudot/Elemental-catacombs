@@ -11,9 +11,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float _dashSpeed;
     [SerializeField] private float _dashCD; //Colldown between dashes.
     [SerializeField] private float _dashTime; //Dash duration.
+    [SerializeField] private float _potions;
 
     private Rigidbody2D _rb;
     private Vector2 _inputMovement;
+    [SerializeField] private Animator _anim;
 
     private bool _canDash = true;
 
@@ -37,6 +39,9 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.rotation = (_inputMovement.x > 0) ? Quaternion.identity : Quaternion.Euler(0, 180, 0);
         }
+
+        ManageAnimations();
+
     }
 
     void FixedUpdate()
@@ -92,5 +97,22 @@ public class PlayerMovement : MonoBehaviour
                 _cameraScript.MoveCamera(Vector2.right);
             }
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Loot"))
+        {
+            _potions += 1;
+            Destroy(collision.gameObject);
+        }
+    }
+
+    private void ManageAnimations()
+    {
+        _anim.SetFloat("Horizontal", _inputMovement.x);
+        _anim.SetFloat("Vertical", _inputMovement.y);
+
+        _anim.SetFloat("Speed", _inputMovement.sqrMagnitude);
     }
 }
