@@ -13,13 +13,14 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody2D _rb;
     private Vector2 _inputMovement;
-    [SerializeField] private Animator _anim;
+    private Animator _anim;
 
     private bool _canDash = true;
 
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -50,6 +51,7 @@ public class PlayerMovement : MonoBehaviour
     {
         _canDash = false;
         Physics2D.IgnoreLayerCollision(0, 7, true);
+        Physics2D.IgnoreLayerCollision(0, 6, true);
         _speed *= _dashSpeed;
         StartCoroutine(DashTime(_dashTime));
     }
@@ -59,6 +61,7 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(dashDuration);
         _speed /= _dashSpeed;
         Physics2D.IgnoreLayerCollision(0, 7, false);
+        Physics2D.IgnoreLayerCollision(0, 6, false);
         StartCoroutine(DashCD(_dashCD));
     }
 
@@ -79,13 +82,14 @@ public class PlayerMovement : MonoBehaviour
         {
             if (collision.gameObject.name == "Left Exit")
             {
+                Debug.Log("collided");
                 _cameraScript.MoveCamera(Vector2.left);
             }
-            else if (collision.gameObject.name == "Down Exit")
+            else if (collision.gameObject.name == "Bottom Exit")
             {
                 _cameraScript.MoveCamera(Vector2.down);
             }
-            else if (collision.gameObject.name == "Up Exit")
+            else if (collision.gameObject.name == "Top Exit")
             {
                 _cameraScript.MoveCamera(Vector2.up);
             }

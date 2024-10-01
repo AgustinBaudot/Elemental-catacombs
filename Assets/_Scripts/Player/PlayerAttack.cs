@@ -6,9 +6,14 @@ public class PlayerAttack : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer _attackSprite;
     [SerializeField] private float _radius, _attackCD;
+    private Animator _anim;
     private bool _canAttack = true;
 
-    // Update is called once per frame
+    private void Start()
+    {
+        _anim = GetComponent<Animator>();
+    }
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0) && _canAttack)
@@ -41,7 +46,9 @@ public class PlayerAttack : MonoBehaviour
     private IEnumerator ShowSwordArea()
     {
         _attackSprite.enabled = true;
+        _anim.SetBool("isAttacking", true);
         yield return new WaitForSeconds(0.05f);
+        _anim.SetBool("isAttacking", false);
         _attackSprite.enabled = false;
         StartCoroutine(AttackCD(_attackCD));
     }

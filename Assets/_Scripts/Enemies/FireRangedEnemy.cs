@@ -13,9 +13,11 @@ public class FireRangedEnemy : Enemy
     {
         _hp = 50;
         _speed = 1.75f;
+        _atkRange = 5f;
+        _persueRange = 7.5f;
+        _attackCD = 2;
         _type = "Ranged";
         _element = "Fire";
-        _range = 7.5f;
         gameObject.tag = "Enemy";
     }
 }

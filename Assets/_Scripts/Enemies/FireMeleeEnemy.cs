@@ -16,9 +16,11 @@ public class FireMeleeEnemy : Enemy
     {
         _hp = 100;
         _speed = 2f;
+        _atkRange = 1.5f;
+        _persueRange = 6;
+        _attackCD = 0.75f;
         _type = "Melee";
         _element = "Fire";
-        _range = 1.5f;
         gameObject.tag = "Enemy";
     }
 }

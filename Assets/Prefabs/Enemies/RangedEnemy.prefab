@@ -134,8 +134,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 0}
-  _lootTable: []
   _hp: 0
+  _lootTable: []
 --- !u!95 &3499490356485391784
 Animator:
   serializedVersion: 5
