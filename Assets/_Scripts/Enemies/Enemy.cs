@@ -10,9 +10,13 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected GameObject _player;
     protected float _attackCD;
     private bool _canAttack = true;
+    private float _maxHp;
+    private bool _isHealing = false;
+    private float _healAmount;
+    private float _healCD = 1;
 
     protected enum EnemyState { Idle, Persuing, Attacking };
-    
+
     [Header("Enemy Characteristics")]
     public float _hp;
     public List<LootItem> _lootTable = new List<LootItem>();
@@ -26,6 +30,8 @@ public class Enemy : MonoBehaviour
 
     public virtual void Start()
     {
+        _maxHp = _hp;
+        _healAmount = _maxHp / 4;
         _enemyState = EnemyState.Idle;
         _impulseSource = GetComponent<CinemachineImpulseSource>();
         Init();
@@ -33,32 +39,48 @@ public class Enemy : MonoBehaviour
 
     protected void Update()
     {
-        if (_enemyState == EnemyState.Idle && Vector2.Distance(_player.transform.position, transform.position) < _persueRange)
+        ManageEnemyState();
+    }
+
+    private void ManageEnemyState()
+    {
+        switch (_enemyState)
         {
-            _enemyState = EnemyState.Persuing;
-            return;
-        }
+            case EnemyState.Idle:
 
-        if (_enemyState == EnemyState.Persuing && !HitStopManager._instance.IsStopped())
-        {
-            if (Vector2.Distance(_player.transform.position, transform.position) < _atkRange)
-            {
-                _enemyState = EnemyState.Attacking;
-                return;
-            }
+                HealOverTime();
 
-            if (Vector2.Distance(_player.transform.position, transform.position) > _persueRange)
-            {
-                _enemyState = EnemyState.Idle;
-            }
+                if (Vector2.Distance(_player.transform.position, transform.position) < _persueRange)
+                {
+                    _enemyState = EnemyState.Persuing;
+                    break;
+                }
+                break;
 
-            var step = _speed * Time.deltaTime; //Calculate distance to move
-            transform.position = Vector2.MoveTowards(transform.position, _player.transform.position, step);
-        }
+            case EnemyState.Persuing:
 
-        else if (_enemyState == EnemyState.Attacking && !HitStopManager._instance.IsStopped() && _canAttack)
-        {
-            Attack();
+                if (Vector2.Distance(_player.transform.position, transform.position) < _atkRange)
+                {
+                    _enemyState = EnemyState.Attacking;
+                    break;
+                }
+
+                else if(Vector2.Distance(_player.transform.position, transform.position) > _persueRange)
+                {
+                    _enemyState = EnemyState.Idle;
+                    break;
+                }
+
+                if (!HitStopManager._instance.IsStopped())
+                {
+                    var step = _speed * Time.deltaTime; //Calculate distance to move
+                    transform.position = Vector2.MoveTowards(transform.position, _player.transform.position, step); 
+                }
+                break;
+
+            case EnemyState.Attacking:
+                if (_canAttack && !HitStopManager._instance.IsStopped()) Attack();
+                break;
         }
     }
 
@@ -78,7 +100,8 @@ public class Enemy : MonoBehaviour
     public virtual void Dies()
     {
         //Add anim.
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        gameObject.SetActive(true);
     }
 
     public virtual void Attack()
@@ -105,6 +128,24 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(attackCD);
         _enemyState = EnemyState.Persuing;
         _canAttack = true;
+    }
+
+    protected virtual void HealOverTime()
+    {
+        if (!_isHealing)
+        {
+            StartCoroutine(HealCD(_healCD));
+            Debug.Log("enemy healed");
+        }
+    }
+
+    private IEnumerator HealCD(float healCD)
+    {
+        _isHealing = true;
+        yield return new WaitForSeconds(healCD);
+        _hp += _healAmount;
+        if (_hp > _maxHp) _hp = _maxHp;
+        _isHealing = false;
     }
 
     [System.Serializable]
