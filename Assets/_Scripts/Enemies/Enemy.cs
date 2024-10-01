@@ -9,19 +9,18 @@ public class Enemy : MonoBehaviour
     protected CinemachineImpulseSource _impulseSource;
     [SerializeField] protected GameObject _player;
     protected float _attackCD;
-    private bool _canAttack = true;
-    private float _maxHp;
-    private bool _isHealing = false;
-    private float _healAmount;
-    private float _healCD = 1;
-
     protected enum EnemyState { Idle, Persuing, Attacking };
 
     [Header("Enemy Characteristics")]
     public float _hp;
     public List<LootItem> _lootTable = new List<LootItem>();
-    protected float _speed, _atkRange, _persueRange;
+    public float _speed, _atkRange, _persueRange;
     protected string _type, _element;
+    protected bool _canAttack = true;
+    private float _maxHp;
+    private bool _isHealing = false;
+    private float _healAmount;
+    private float _healCD = 1;
 
     public virtual void Init()
     {
@@ -39,6 +38,7 @@ public class Enemy : MonoBehaviour
 
     protected void Update()
     {
+        //Debug.Log($"{_enemyState} from {name}.");
         ManageEnemyState();
     }
 
@@ -47,6 +47,8 @@ public class Enemy : MonoBehaviour
         switch (_enemyState)
         {
             case EnemyState.Idle:
+
+                if (_player == null) break;
 
                 HealOverTime();
 
@@ -58,6 +60,8 @@ public class Enemy : MonoBehaviour
                 break;
 
             case EnemyState.Persuing:
+
+                if (_player == null) break;
 
                 if (Vector2.Distance(_player.transform.position, transform.position) < _atkRange)
                 {
@@ -79,6 +83,8 @@ public class Enemy : MonoBehaviour
                 break;
 
             case EnemyState.Attacking:
+                if (_player == null) break;
+
                 if (_canAttack && !HitStopManager._instance.IsStopped()) Attack();
                 break;
         }
@@ -107,7 +113,6 @@ public class Enemy : MonoBehaviour
     public virtual void Attack()
     {
         StartCoroutine(AttackCD(_attackCD));
-        //Attack;
     }
 
     public void DropLoot()
@@ -122,7 +127,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public IEnumerator AttackCD(float attackCD)
+    public virtual IEnumerator AttackCD(float attackCD)
     {
         _canAttack = false;
         yield return new WaitForSeconds(attackCD);
@@ -135,7 +140,6 @@ public class Enemy : MonoBehaviour
         if (!_isHealing)
         {
             StartCoroutine(HealCD(_healCD));
-            Debug.Log("enemy healed");
         }
     }
 

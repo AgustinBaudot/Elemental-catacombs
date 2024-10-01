@@ -50,8 +50,8 @@ public class PlayerMovement : MonoBehaviour
     private void Dash() //Player dashes.
     {
         _canDash = false;
-        Physics2D.IgnoreLayerCollision(0, 7, true);
-        Physics2D.IgnoreLayerCollision(0, 6, true);
+        Physics2D.IgnoreLayerCollision(9, 7, true);
+        Physics2D.IgnoreLayerCollision(9, 6, true);
         _speed *= _dashSpeed;
         StartCoroutine(DashTime(_dashTime));
     }
@@ -60,8 +60,8 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(dashDuration);
         _speed /= _dashSpeed;
-        Physics2D.IgnoreLayerCollision(0, 7, false);
-        Physics2D.IgnoreLayerCollision(0, 6, false);
+        Physics2D.IgnoreLayerCollision(9, 7, false);
+        Physics2D.IgnoreLayerCollision(9, 6, false);
         StartCoroutine(DashCD(_dashCD));
     }
 

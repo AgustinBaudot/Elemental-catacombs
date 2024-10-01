@@ -17,10 +17,10 @@ public class PlayerHealth : MonoBehaviour
         Dies();
     }
 
-    public void ReceiveDamage()
+    public void ReceiveDamage(int damageReceived = 1)
     {
         //if enemy successfuly attacks player:
-        _health--;
+        _health-= damageReceived;
     }
 
     public void UsePotion()

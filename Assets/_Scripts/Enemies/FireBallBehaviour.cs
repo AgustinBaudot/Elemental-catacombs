@@ -7,17 +7,17 @@ public class FireBallBehaviour : MonoBehaviour
     [SerializeField] private float _ballSpeed = 5;
     [SerializeField] private float _currentTime = 0;
     [SerializeField] private float _lifeTime = 5;
-    private Transform playerTransform;
+    [SerializeField] private float _persueTime = 1;
+    private Transform _playerTransform;
+    private Vector2 _direction;
 
     private PlayerHealth _playerHealth;
 
     void Start()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-
-        if (player != null)
+        if (GameObject.FindGameObjectWithTag("Player") != null)
         {
-            playerTransform = player.transform;
+            _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
     }
 
@@ -25,16 +25,19 @@ public class FireBallBehaviour : MonoBehaviour
     {
         _currentTime += Time.deltaTime;
 
+        if (_currentTime <= _persueTime)
+        {
+            _direction = (_playerTransform.position - transform.position).normalized;
+        }
+
         if (_currentTime >= _lifeTime)
         {
             Destroy(gameObject);
         }
 
-        if (playerTransform != null)
+        if (_playerTransform != null)
         {
-            Vector2 direction = (playerTransform.position - transform.position).normalized;
-
-            transform.position += (Vector3)direction * _ballSpeed * Time.deltaTime;
+            transform.position += (Vector3)_direction * _ballSpeed * Time.deltaTime;
         }
 
     }
@@ -44,8 +47,10 @@ public class FireBallBehaviour : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             _playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
-            _playerHealth.ReceiveDamage();
+            _playerHealth.ReceiveDamage(2);
             Destroy(gameObject);
-        }  
+        }
+
+        Destroy(gameObject);
     }
 }

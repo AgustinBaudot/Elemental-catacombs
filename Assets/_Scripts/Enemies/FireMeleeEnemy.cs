@@ -18,18 +18,29 @@ public class FireMeleeEnemy : Enemy
         _speed = 2f;
         _atkRange = 1.5f;
         _persueRange = 6;
-        _attackCD = 0.75f;
+        _attackCD = 0.5f;
         _type = "Melee";
         _element = "Fire";
         gameObject.tag = "Enemy";
+        _playerHealth = GameObject.Find("Player").GetComponent<PlayerHealth>();
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    public override IEnumerator AttackCD(float attackCD)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        _canAttack = false;
+        yield return new WaitForSeconds(attackCD);
+        _enemyState = EnemyState.Persuing;
+        _canAttack = true;
+        if (Physics2D.OverlapCircleAll(transform.position, 1.5f, 9) != null)
         {
-            _playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
             _playerHealth.ReceiveDamage();
+            Debug.Log("player hit");
         }
+        Debug.Log("Attacked");
     }
+
+    //public void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.DrawSphere(transform.position, 1.5f);
+    //}
 }

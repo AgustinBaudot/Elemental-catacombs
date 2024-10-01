@@ -17,15 +17,15 @@ public class FireRangedEnemy : Enemy
 
     new void Update()
     {
-        base.Start();
+        base.Update();
 
-        _currentTime += Time.deltaTime;
+        //_currentTime += Time.deltaTime;
 
-        if(_currentTime >= _attackCoolDown)
-        {
-            RangedAttack();
-            _currentTime = 0;
-        }
+        //if(_currentTime >= _attackCoolDown)
+        //{
+        //    Atta();
+        //    _currentTime = 0;
+        //}
     }
 
     public override void Init()
@@ -40,8 +40,9 @@ public class FireRangedEnemy : Enemy
         gameObject.tag = "Enemy";
     }
 
-    private void RangedAttack()
+    public override void Attack()
     {
+        base.Attack();
         Instantiate(_fireBall, _ballSpawnPoint.position, transform.rotation);
     }
 }
