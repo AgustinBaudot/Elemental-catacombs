@@ -45,11 +45,9 @@ public class PlayerAttack : MonoBehaviour
 
     private IEnumerator ShowSwordArea()
     {
-        _attackSprite.enabled = true;
         _anim.SetBool("isAttacking", true);
         yield return new WaitForSeconds(0.05f);
         _anim.SetBool("isAttacking", false);
-        _attackSprite.enabled = false;
         StartCoroutine(AttackCD(_attackCD));
     }
 
