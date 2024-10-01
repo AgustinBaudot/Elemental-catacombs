@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private int _health = 5;
+    public int _health = 5;
+    private SpriteRenderer _spriteRenderer;
 
     private void Update()
     {
@@ -12,6 +13,8 @@ public class PlayerHealth : MonoBehaviour
         {
             if (GetComponent<PlayerMovement>()._potions > 0) UsePotion();
         }
+
+        Dies();
     }
 
     public void ReceiveDamage()
@@ -23,5 +26,13 @@ public class PlayerHealth : MonoBehaviour
     public void UsePotion()
     {
         GetComponent<PlayerMovement>()._potions--;
+    }
+
+    private void Dies()
+    {
+        if (_health <= 0) 
+        { 
+            Destroy(gameObject);
+        }
     }
 }

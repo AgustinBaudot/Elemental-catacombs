@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class FireMeleeEnemy : Enemy
 {
+    private PlayerHealth _playerHealth;
 
     new void Start()
     {
@@ -21,5 +22,14 @@ public class FireMeleeEnemy : Enemy
         _type = "Melee";
         _element = "Fire";
         gameObject.tag = "Enemy";
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            _playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
+            _playerHealth.ReceiveDamage();
+        }
     }
 }

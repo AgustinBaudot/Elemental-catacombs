@@ -92,8 +92,8 @@ public class Enemy : MonoBehaviour
         _hp -= damageReceived;
         if (_hp <= 0)
         {
-            Dies();
             DropLoot();
+            Dies();
         }
     }
 
