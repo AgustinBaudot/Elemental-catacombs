@@ -6,6 +6,7 @@ public class PlayerHealth : MonoBehaviour
 {
     public int _health = 5;
     private SpriteRenderer _spriteRenderer;
+    private bool _hasImmunity = false;
 
     public HUD _hud;
     private void Start()
@@ -25,15 +26,17 @@ public class PlayerHealth : MonoBehaviour
 
     public void ReceiveDamage(int damageReceived = 1)
     {
-        //if enemy successfuly attacks player:
+        if (_hasImmunity) return;
         StartCoroutine(ChangeColor(Color.red, 0.2f));
+        _hasImmunity = true;
         _health -= damageReceived;
+        StartCoroutine(ImmunityDuration());
         _hud.UpdateHearts(_health);
-
     }
 
     public void UsePotion()
     {
+        if (_health == 5) return;
         GetComponent<PlayerMovement>()._potions--;
         _health++;
         _hud.UpdateHearts(_health);
@@ -41,8 +44,8 @@ public class PlayerHealth : MonoBehaviour
 
     private void Dies()
     {
-        if (_health <= 0) 
-        { 
+        if (_health <= 0)
+        {
             Destroy(gameObject);
         }
     }
@@ -55,5 +58,11 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(_duration);
 
         _spriteRenderer.color = _originalColor;
+    }
+
+    private IEnumerator ImmunityDuration()
+    {
+        yield return new WaitForSeconds(0.75f);
+        _hasImmunity = false;
     }
 }

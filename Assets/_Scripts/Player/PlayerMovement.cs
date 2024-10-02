@@ -74,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
     private void ManageMovement()
     {
         _rb.MovePosition(transform.position + new Vector3(_inputMovement.x, _inputMovement.y, 0) * Time.deltaTime * _speed);
-    } //Player movement.
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -82,7 +82,6 @@ public class PlayerMovement : MonoBehaviour
         {
             if (collision.gameObject.name == "Left Exit")
             {
-                Debug.Log("collided");
                 _cameraScript.MoveCamera(Vector2.left);
             }
             else if (collision.gameObject.name == "Bottom Exit")

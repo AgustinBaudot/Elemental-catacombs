@@ -38,16 +38,18 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(_attackSprite.transform.position, _radius);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.DrawWireSphere(_attackSprite.transform.position, _radius);
+    //}
 
     private IEnumerator ShowSwordArea()
     {
-        _anim.SetBool("isAttacking", true);
+        //_anim.SetBool("isAttacking", true);
+        transform.GetChild(0).gameObject.SetActive(true);
         yield return new WaitForSeconds(0.05f);
-        _anim.SetBool("isAttacking", false);
+        transform.GetChild(0).gameObject.SetActive(false);
+        //_anim.SetBool("isAttacking", false);
         StartCoroutine(AttackCD(_attackCD));
     }
 
