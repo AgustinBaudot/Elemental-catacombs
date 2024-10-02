@@ -18,21 +18,13 @@ public class FireRangedEnemy : Enemy
     new void Update()
     {
         base.Update();
-
-        //_currentTime += Time.deltaTime;
-
-        //if(_currentTime >= _attackCoolDown)
-        //{
-        //    Atta();
-        //    _currentTime = 0;
-        //}
     }
 
     public override void Init()
     {
-        _hp = 50;
+        _hp = 20;
         _speed = 1.75f;
-        _atkRange = 5f;
+        _atkRange = 5;
         _persueRange = 8;
         _attackCD = 2;
         _type = "Ranged";

@@ -47,7 +47,7 @@ public class FireBallBehaviour : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             _playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
-            _playerHealth.ReceiveDamage(2);
+            _playerHealth.ReceiveDamage();
             Destroy(gameObject);
         }
 

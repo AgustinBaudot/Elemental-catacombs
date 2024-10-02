@@ -111,7 +111,7 @@ public class Enemy : MonoBehaviour
     {
         //Add anim.
         //Destroy(gameObject);
-        gameObject.SetActive(true);
+        gameObject.SetActive(false);
     }
 
     public virtual void Attack()
@@ -126,7 +126,7 @@ public class Enemy : MonoBehaviour
             float randomValue = Random.Range(0f, 1f);
             if (randomValue <= lootItem.dropChance)
             {
-                Instantiate(lootItem._lootPrefab, transform.position, Quaternion.identity);
+                Instantiate(lootItem._lootPrefab, transform.position, Quaternion.identity, transform.parent);
             }
         }
     }

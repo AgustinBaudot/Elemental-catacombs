@@ -11,16 +11,16 @@ public class FireMeleeEnemy : Enemy
     new void Start()
     {
         base.Start();
-        _animator = GetComponent<Animator>();   
+        _animator = GetComponent<Animator>();
     }
 
     public override void Init()
     {
-        _hp = 100;
-        _speed = 2f;
+        _hp = 30;
+        _speed = 2;
         _atkRange = 1.5f;
         _persueRange = 6;
-        _attackCD = 0.5f;
+        _attackCD = 1.5f;
         _type = "Melee";
         _element = "Fire";
         gameObject.tag = "Enemy";
@@ -34,21 +34,26 @@ public class FireMeleeEnemy : Enemy
 
         yield return new WaitForSeconds(attackCD);
 
-        if (Physics2D.OverlapCircleAll(transform.position, 1.5f, 9) != null)
+        var collisions = Physics2D.OverlapCircleAll(transform.position, _atkRange);
+
+        if (collisions.Length > 0)
         {
-            _playerHealth.ReceiveDamage();
-            Debug.Log("player hit");
+            foreach (Collider2D collision in collisions)
+            {
+                if (collision.gameObject.name == "Player")
+                {
+                    _playerHealth.ReceiveDamage();
+                }
+            }
         }
 
         _animator.SetBool("enemyAttacking", false);
         _enemyState = EnemyState.Persuing;
         _canAttack = true;
-
-        Debug.Log("Attacked");
     }
 
     //public void OnDrawGizmosSelected()
     //{
-    //    Gizmos.DrawSphere(transform.position, 1.5f);
+    //    Gizmos.DrawSphere(transform.position, 1f);
     //}
 }
