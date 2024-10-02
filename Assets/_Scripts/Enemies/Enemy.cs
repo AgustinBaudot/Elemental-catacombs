@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     protected CinemachineImpulseSource _impulseSource;
     [SerializeField] protected GameObject _player;
     protected float _attackCD;
+    private SpriteRenderer _spriteRenderer;
     protected enum EnemyState { Idle, Persuing, Attacking };
 
     [Header("Enemy Characteristics")]
@@ -34,6 +35,7 @@ public class Enemy : MonoBehaviour
         _enemyState = EnemyState.Idle;
         _impulseSource = GetComponent<CinemachineImpulseSource>();
         Init();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     protected void Update()
@@ -96,11 +98,13 @@ public class Enemy : MonoBehaviour
         CameraShakeManager._instance.CameraShake(_impulseSource); //Screen shake
         HitStopManager._instance.StartHitStop(0.1f);
         _hp -= damageReceived;
+        StartCoroutine(ChangeColor(Color.red, 0.2f));
         if (_hp <= 0)
         {
             DropLoot();
             Dies();
         }
+        
     }
 
     public virtual void Dies()
@@ -150,6 +154,16 @@ public class Enemy : MonoBehaviour
         _hp += _healAmount;
         if (_hp > _maxHp) _hp = _maxHp;
         _isHealing = false;
+    }
+
+    private IEnumerator ChangeColor(Color _newColor, float _duration)
+    {
+        Color _originalColor = _spriteRenderer.color;
+        _spriteRenderer.color = _newColor;
+
+        yield return new WaitForSeconds(_duration);
+
+        _spriteRenderer.color = _originalColor;
     }
 
     [System.Serializable]

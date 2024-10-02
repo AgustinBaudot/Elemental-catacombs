@@ -105,6 +105,10 @@ MonoBehaviour:
   _lootTable:
   - _lootPrefab: {fileID: 4647944313011731390, guid: 956a1def1ffcfae47a65295827c522a3, type: 3}
     dropChance: 0.486
+  _speed: 0
+  _atkRange: 0
+  _persueRange: 0
+  _animator: {fileID: 6946835780736727463}
 --- !u!61 &4662222890547279628
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -6,10 +6,12 @@ using UnityEngine;
 public class FireMeleeEnemy : Enemy
 {
     private PlayerHealth _playerHealth;
+    [SerializeField] private Animator _animator;
 
     new void Start()
     {
         base.Start();
+        _animator = GetComponent<Animator>();   
     }
 
     public override void Init()
@@ -27,15 +29,21 @@ public class FireMeleeEnemy : Enemy
 
     public override IEnumerator AttackCD(float attackCD)
     {
+        _animator.SetBool("enemyAttacking", true);
         _canAttack = false;
+
         yield return new WaitForSeconds(attackCD);
-        _enemyState = EnemyState.Persuing;
-        _canAttack = true;
+
         if (Physics2D.OverlapCircleAll(transform.position, 1.5f, 9) != null)
         {
             _playerHealth.ReceiveDamage();
             Debug.Log("player hit");
         }
+
+        _animator.SetBool("enemyAttacking", false);
+        _enemyState = EnemyState.Persuing;
+        _canAttack = true;
+
         Debug.Log("Attacked");
     }
 
