@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameStateManager : MonoBehaviour
 {
     private List<GameObject> _enemies = new List<GameObject>();
+    public GameObject GameOverScreen;
 
     private void Start()
     {
@@ -12,6 +14,7 @@ public class GameStateManager : MonoBehaviour
         {
             _enemies.Add(objet);
         }
+
     }
 
     private void Update()
@@ -24,6 +27,16 @@ public class GameStateManager : MonoBehaviour
 
     public void Lose()
     {
-        Debug.Log("LOSE");
+       GameOverScreen.SetActive(true);
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("Main menu");
     }
 }

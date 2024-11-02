@@ -11,6 +11,9 @@ public class PlayerHealth : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private bool _hasImmunity = false;
 
+    public GameStateManager _gameStateManager;
+    private bool _isDead;
+
     private void Start()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -50,10 +53,12 @@ public class PlayerHealth : MonoBehaviour
 
     private void Dies()
     {
-        if (_health <= 0)
+        if (_health <= 0 && !_isDead)
         {
+            _isDead = true;
             Dead.Invoke();
             Destroy(gameObject);
+            _gameStateManager.Lose();
         }
     }
 

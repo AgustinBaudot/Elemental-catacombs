@@ -18,7 +18,7 @@ public class MainMenuButtons : MonoBehaviour
     public void Play()
     {
         _fadeScript.FadeOut();
-        StartCoroutine(ChangeScene(SceneManager.GetSceneByName("Playground").buildIndex));
+        StartCoroutine(ChangeScene(SceneManager.GetSceneByName("2").buildIndex));
     }
 
     public void Options()
