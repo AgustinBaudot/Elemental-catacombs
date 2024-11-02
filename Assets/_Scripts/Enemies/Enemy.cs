@@ -110,8 +110,8 @@ public class Enemy : MonoBehaviour
     public virtual void Dies()
     {
         //Add anim.
-        //Destroy(gameObject);
-        gameObject.SetActive(false);
+        Destroy(gameObject);
+        //gameObject.SetActive(false);
     }
 
     public virtual void Attack()

@@ -1,17 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerHealth : MonoBehaviour
 {
     public int _health = 5;
+    public HUD _hud;
+    public UnityEvent Dead; 
     private SpriteRenderer _spriteRenderer;
     private bool _hasImmunity = false;
 
-    public HUD _hud;
     private void Start()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        if (Dead == null)
+        {
+            Dead = new UnityEvent();
+        }
     }
 
     private void Update()
@@ -46,6 +52,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (_health <= 0)
         {
+            Dead.Invoke();
             Destroy(gameObject);
         }
     }

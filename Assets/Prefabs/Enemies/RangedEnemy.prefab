@@ -170,6 +170,9 @@ MonoBehaviour:
   _player: {fileID: 0}
   _hp: 0
   _lootTable: []
+  _speed: 0
+  _atkRange: 0
+  _persueRange: 0
   _fireBall: {fileID: 1570660574617061558, guid: e6327e82805ee84498187445aaba046f, type: 3}
   _ballSpawnPoint: {fileID: 479922904894420983}
   _attackCoolDown: 1

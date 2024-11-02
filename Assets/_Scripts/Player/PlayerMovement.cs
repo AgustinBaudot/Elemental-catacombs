@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Camera _cameraScript;
     [SerializeField] private float _speed, _dashSpeed; //Normal moving speed and dashing speed;
     [SerializeField] private float _dashCD, _dashTime; //Colldown between dashes & dash duration;
+    [SerializeField] private ParticleSystem _dust;
     public int _potions;
 
     private Rigidbody2D _rb;
@@ -47,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Dash() //Player dashes.
     {
+        CreateDust();
         _canDash = false;
         Physics2D.IgnoreLayerCollision(9, 7, true);
         Physics2D.IgnoreLayerCollision(9, 6, true);
@@ -76,6 +78,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+
+        if (RoomManager._instance.IsClosed())
+        {
+            return;
+        }
+
         if (collision.gameObject.CompareTag("Exit"))
         {
             if (collision.gameObject.name == "Left Exit")
@@ -112,5 +120,10 @@ public class PlayerMovement : MonoBehaviour
         _anim.SetFloat("Vertical", _inputMovement.y);
 
         _anim.SetFloat("Speed", _inputMovement.sqrMagnitude);
+    }
+
+    private void CreateDust()
+    {
+        _dust.Play();
     }
 }

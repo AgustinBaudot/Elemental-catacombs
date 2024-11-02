@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6946835780736727463}
   m_Layer: 6
   m_Name: MeleeEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,10 +101,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 0}
-  _hp: 0
+  _hp: 40
   _lootTable:
   - _lootPrefab: {fileID: 4647944313011731390, guid: 956a1def1ffcfae47a65295827c522a3, type: 3}
-    dropChance: 0.486
+    dropChance: 1
   _speed: 0
   _atkRange: 0
   _persueRange: 0
