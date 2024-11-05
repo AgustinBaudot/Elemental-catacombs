@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class Fade : MonoBehaviour
 {
     [SerializeField] private Image _fade;
-    public UnityEvent FadeFinished = new UnityEvent();
 
     public void FadeIn()
     {
@@ -29,7 +28,6 @@ public class Fade : MonoBehaviour
                 _fade.color = new Color(0, 0, 0, i);
                 yield return null;
             }
-            FadeFinished.Invoke();
         }
 
         else
@@ -40,7 +38,6 @@ public class Fade : MonoBehaviour
                 _fade.color = new Color(0, 0, 0, i);
                 yield return null;
             }
-            FadeFinished.Invoke();
         }
     }
 }

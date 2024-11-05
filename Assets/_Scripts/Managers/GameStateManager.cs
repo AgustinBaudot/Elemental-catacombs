@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameStateManager : MonoBehaviour
 {
     private List<GameObject> _enemies = new List<GameObject>();
-    public GameObject GameOverScreen;
+    [SerializeField] private GameObject _gameOverScreen, _winScreen;
 
     private void Start()
     {
@@ -21,13 +21,18 @@ public class GameStateManager : MonoBehaviour
     {
         if (_enemies.Count == 0)
         {
-            Debug.Log("WIN");
+            if (!_winScreen.activeSelf) Win();
         }
+    }
+
+    public void Win()
+    {
+        _winScreen.SetActive(true);
     }
 
     public void Lose()
     {
-       GameOverScreen.SetActive(true);
+       _gameOverScreen.SetActive(true);
     }
 
     public void Restart()

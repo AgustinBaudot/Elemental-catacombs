@@ -18,13 +18,13 @@ public class MainMenuButtons : MonoBehaviour
     public void Play()
     {
         _fadeScript.FadeOut();
-        StartCoroutine(ChangeScene(SceneManager.GetSceneByName("2").buildIndex));
+        StartCoroutine(ChangeScene(1));
     }
 
     public void Options()
     {
         _fadeScript.FadeOut();
-        StartCoroutine(ChangeScene(SceneManager.GetSceneByName("Options").buildIndex));
+        StartCoroutine(ChangeScene(2));
     }
 
     public void Exit()
