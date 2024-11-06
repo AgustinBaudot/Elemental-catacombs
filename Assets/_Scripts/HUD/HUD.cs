@@ -4,7 +4,17 @@ using UnityEngine;
 
 public class HUD : MonoBehaviour
 {
-    public GameObject[] _hearts;
+    [SerializeField] private GameObject[] _hearts;
+    [SerializeField] private GameObject[] _potions;
+
+
+    private void Start()
+    {
+        foreach (GameObject potion in _potions)
+        {
+            potion.SetActive(false);
+        }
+    }
 
     public void UpdateHearts(int currentHealth)
     {
@@ -17,6 +27,30 @@ public class HUD : MonoBehaviour
             else
             {
                 _hearts[i].SetActive(false);
+            }
+        }
+    }
+
+    public void UpdatePotions(int currentPotions)
+    {
+
+        if (currentPotions >= 2)
+        {
+            foreach (GameObject potion in _potions)
+            {
+                potion.SetActive(true);
+            }
+        }
+        else if (currentPotions == 1)
+        {
+            _potions[0].SetActive(true);
+            _potions[1].SetActive(false);
+        }
+        else if (currentPotions == 0)
+        {
+            foreach (GameObject potion in _potions)
+            {
+                potion.SetActive(false);
             }
         }
     }

@@ -6,12 +6,14 @@ public class PlayerAttack : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer _attackSprite;
     [SerializeField] private float _radius, _attackCD;
-    private Animator _anim;
+    [SerializeField] private AudioClip _attackClip, _attackHitClip;
+    //[SerializeField] private float _knockbackForce;
+    private AudioSource _source;
     private bool _canAttack = true;
 
     private void Start()
     {
-        _anim = GetComponent<Animator>();
+        _source = GameObject.Find("Combat SFX").GetComponent<AudioSource>();
     }
 
     void Update()
@@ -29,27 +31,30 @@ public class PlayerAttack : MonoBehaviour
 
         Collider2D[] objects = Physics2D.OverlapCircleAll(_attackSprite.transform.position, _radius);
 
+        _source.clip = _attackClip;
+
         foreach (Collider2D enemyGameobject in objects)
         {
             if (enemyGameobject.gameObject.CompareTag("Enemy"))
             {
-                enemyGameobject.gameObject.GetComponent<Enemy>().ReceiveDamage(10);
+                Vector2 direction = (enemyGameobject.transform.position - transform.position).normalized; //Offset for direction of knockback
+
+                //Vector2 knockback = direction * _knockbackForce;
+
+                enemyGameobject.gameObject.GetComponent<Enemy>().ReceiveDamage(10, Vector2.zero);
+
+                //GetComponent<Rigidbody2D>().AddForce(-knockback, ForceMode2D.Impulse);
+                _source.clip = _attackHitClip;
             }
         }
+        _source.Play();
     }
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.DrawWireSphere(_attackSprite.transform.position, _radius);
-    //}
 
     private IEnumerator ShowSwordArea()
     {
-        //_anim.SetBool("isAttacking", true);
         transform.GetChild(0).gameObject.SetActive(true);
         yield return new WaitForSeconds(0.05f);
         transform.GetChild(0).gameObject.SetActive(false);
-        //_anim.SetBool("isAttacking", false);
         StartCoroutine(AttackCD(_attackCD));
     }
 

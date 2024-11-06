@@ -2,17 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Cinemachine;
 
 public class PlayerHealth : MonoBehaviour
 {
+    [SerializeField] private HUD _hud;
+    [SerializeField] private AudioClip _damageTaken, _potionUsed;
     public int _health = 5;
-    public HUD _hud;
     public UnityEvent Dead; 
     private SpriteRenderer _spriteRenderer;
     private bool _hasImmunity = false;
 
     public GameStateManager _gameStateManager;
     private bool _isDead;
+    private AudioSource _combatSource, _itemSource;
+    private CinemachineImpulseSource _impulseSource;
+    private FullInventory _inventoryScript;
+
 
     private void Start()
     {
@@ -21,6 +27,10 @@ public class PlayerHealth : MonoBehaviour
         {
             Dead = new UnityEvent();
         }
+        _combatSource = GameObject.Find("Combat SFX").GetComponent<AudioSource>();
+        _itemSource = GameObject.Find("Items SFX").GetComponent<AudioSource>();
+        _impulseSource = GetComponent<CinemachineImpulseSource>();
+        _inventoryScript = GetComponent<FullInventory>();
     }
 
     private void Update()
@@ -36,6 +46,10 @@ public class PlayerHealth : MonoBehaviour
     public void ReceiveDamage(int damageReceived = 1)
     {
         if (_hasImmunity) return;
+        _combatSource.clip = _damageTaken;
+        _combatSource.Play();
+        CameraShakeManager._instance.CameraShake(_impulseSource);
+        HitStopManager._instance.StartHitStop(0.1f);
         StartCoroutine(ChangeColor(Color.red, 0.2f));
         _hasImmunity = true;
         _health -= damageReceived;
@@ -46,8 +60,12 @@ public class PlayerHealth : MonoBehaviour
     public void UsePotion()
     {
         if (_health == 5) return;
+        _itemSource.clip = _potionUsed;
+        _itemSource.Play();
         GetComponent<PlayerMovement>()._potions--;
         _health++;
+        _hud.UpdatePotions(GetComponent<PlayerMovement>()._potions);
+        _inventoryScript.UpdatePotions(GetComponent<PlayerMovement>()._potions);
         _hud.UpdateHearts(_health);
     }
 

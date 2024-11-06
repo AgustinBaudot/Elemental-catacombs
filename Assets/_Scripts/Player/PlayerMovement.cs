@@ -5,9 +5,11 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private Camera _cameraScript;
+    [SerializeField] private HUD _hud;
     [SerializeField] private float _speed, _dashSpeed; //Normal moving speed and dashing speed;
     [SerializeField] private float _dashCD, _dashTime; //Colldown between dashes & dash duration;
     [SerializeField] private ParticleSystem _dust;
+    [SerializeField] private AudioClip _pickUp, _footsteps, _dash;
     public int _potions;
 
     private Rigidbody2D _rb;
@@ -16,11 +18,17 @@ public class PlayerMovement : MonoBehaviour
 
     private bool _canDash = true;
 
+    private AudioSource _itemSource, _movementSource;
+
+    private FullInventory _inventoryScript;
+
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
-
+        _itemSource = GameObject.Find("Items SFX").GetComponent<AudioSource>();
+        _movementSource = GameObject.Find("Movement SFX").GetComponent<AudioSource>();
+        _inventoryScript = GetComponent<FullInventory>();
     }
 
     // Update is called once per frame
@@ -50,6 +58,10 @@ public class PlayerMovement : MonoBehaviour
     private void Dash() //Player dashes.
     {
         CreateDust();
+        _movementSource.clip = _dash;
+        _movementSource.pitch = 1;
+        _movementSource.loop = false;
+        _movementSource.Play();
         _canDash = false;
         Physics2D.IgnoreLayerCollision(9, 7, true);
         Physics2D.IgnoreLayerCollision(9, 6, true);
@@ -75,6 +87,16 @@ public class PlayerMovement : MonoBehaviour
     private void ManageMovement()
     {
         _rb.MovePosition(transform.position + new Vector3(_inputMovement.x, _inputMovement.y, 0) * Time.deltaTime * _speed);
+        if (_inputMovement.x == 0 && _inputMovement.y == 0)
+        {
+            _movementSource.Stop();
+            return;
+        }
+        if (_movementSource.isPlaying) return;
+        _movementSource.clip = _footsteps;
+        _movementSource.pitch = 1.5f;
+        _movementSource.loop = true;
+        _movementSource.Play();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -110,8 +132,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Loot"))
         {
-            _potions ++;
+            _potions++;
             Destroy(collision.gameObject);
+            _hud.UpdatePotions(_potions);
+            _inventoryScript.UpdatePotions(_potions);
+            _itemSource.clip = _pickUp;
+            _itemSource.Play();
         }
     }
 

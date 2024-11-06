@@ -92,19 +92,18 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public virtual void ReceiveDamage(int damageReceived)
+    public virtual void ReceiveDamage(int damageReceived, Vector2 knockback)
     {
-        //Make difference between normal hit and final blow.
         CameraShakeManager._instance.CameraShake(_impulseSource); //Screen shake
         HitStopManager._instance.StartHitStop(0.1f);
         _hp -= damageReceived;
+        GetComponent<Rigidbody2D>().AddForce(knockback, ForceMode2D.Impulse);
         StartCoroutine(ChangeColor(Color.red, 0.2f));
         if (_hp <= 0)
         {
             DropLoot();
             Dies();
         }
-        
     }
 
     public virtual void Dies()

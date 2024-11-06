@@ -32,7 +32,6 @@ public class RoomManager : MonoBehaviour
         {
             if (_rooms[System.Array.IndexOf(_rooms, _closest)].childCount == 0)
             {
-                Debug.Log("Room is no longer closed");
                 _closed = false;
             }
         }
