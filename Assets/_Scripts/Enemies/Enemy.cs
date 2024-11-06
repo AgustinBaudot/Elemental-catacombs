@@ -40,7 +40,6 @@ public class Enemy : MonoBehaviour
 
     protected void Update()
     {
-        //Debug.Log($"{_enemyState} from {name}.");
         ManageEnemyState();
     }
 
@@ -97,7 +96,10 @@ public class Enemy : MonoBehaviour
         CameraShakeManager._instance.CameraShake(_impulseSource); //Screen shake
         HitStopManager._instance.StartHitStop(0.1f);
         _hp -= damageReceived;
+        GetComponent<Rigidbody2D>().mass = 1;
         GetComponent<Rigidbody2D>().AddForce(knockback, ForceMode2D.Impulse);
+        GetComponent<Rigidbody2D>().mass = 1000000;
+
         StartCoroutine(ChangeColor(Color.red, 0.2f));
         if (_hp <= 0)
         {
@@ -108,9 +110,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void Dies()
     {
-        //Add anim.
         Destroy(gameObject);
-        //gameObject.SetActive(false);
     }
 
     public virtual void Attack()

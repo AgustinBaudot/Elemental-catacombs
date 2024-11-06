@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class HUD : MonoBehaviour
 {
-    [SerializeField] private GameObject[] _hearts;
-    [SerializeField] private GameObject[] _potions;
+    [SerializeField] private GameObject[] _hearts, _potions;
 
 
     private void Start()
     {
-        foreach (GameObject potion in _potions)
-        {
-            potion.SetActive(false);
-        }
+        UpdateHearts(5);
+        UpdatePotions(0);
     }
 
     public void UpdateHearts(int currentHealth)

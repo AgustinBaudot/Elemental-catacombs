@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DentedPixel;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -21,6 +23,8 @@ public class PlayerMovement : MonoBehaviour
     private AudioSource _itemSource, _movementSource;
 
     private FullInventory _inventoryScript;
+
+    [SerializeField] private GameObject _dashBar;
 
     void Awake()
     {
@@ -75,6 +79,9 @@ public class PlayerMovement : MonoBehaviour
         _speed /= _dashSpeed;
         Physics2D.IgnoreLayerCollision(9, 7, false);
         Physics2D.IgnoreLayerCollision(9, 6, false);
+
+        LeanTween.scaleX(_dashBar, 0, dashDuration);
+
         StartCoroutine(DashCD(_dashCD));
     }
 
@@ -82,12 +89,13 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(dashCD);
         _canDash = true;
+        LeanTween.scaleX(_dashBar, 1, dashCD);
     }
 
     private void ManageMovement()
     {
         _rb.MovePosition(transform.position + new Vector3(_inputMovement.x, _inputMovement.y, 0) * Time.deltaTime * _speed);
-        if (_inputMovement.x == 0 && _inputMovement.y == 0)
+        if (_inputMovement.magnitude == 0)
         {
             _movementSource.Stop();
             return;

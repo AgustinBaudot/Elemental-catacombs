@@ -7,7 +7,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private SpriteRenderer _attackSprite;
     [SerializeField] private float _radius, _attackCD;
     [SerializeField] private AudioClip _attackClip, _attackHitClip;
-    //[SerializeField] private float _knockbackForce;
+    [SerializeField] private float _knockbackForce;
     private AudioSource _source;
     private bool _canAttack = true;
 
@@ -39,7 +39,11 @@ public class PlayerAttack : MonoBehaviour
             {
                 Vector2 direction = (enemyGameobject.transform.position - transform.position).normalized; //Offset for direction of knockback
 
-                //Vector2 knockback = direction * _knockbackForce;
+                Vector2 knockback = direction * _knockbackForce;
+
+                Debug.Log(knockback);
+
+                Debug.Log(_knockbackForce);
 
                 enemyGameobject.gameObject.GetComponent<Enemy>().ReceiveDamage(10, Vector2.zero);
 
