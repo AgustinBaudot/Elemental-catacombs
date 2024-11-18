@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using DentedPixel;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -11,9 +13,17 @@ public class PlayerAttack : MonoBehaviour
     private AudioSource _source;
     private bool _canAttack = true;
 
+    [SerializeField] private GameObject _attackBar;
+
+    public UnityEvent UpdateAttackHealthBar;
+
     private void Start()
     {
         _source = GameObject.Find("Combat SFX").GetComponent<AudioSource>();
+        if (UpdateAttackHealthBar == null)
+        {
+            UpdateAttackHealthBar = new UnityEvent();
+        }
     }
 
     void Update()
@@ -27,7 +37,9 @@ public class PlayerAttack : MonoBehaviour
     public void Attack()
     {
         _canAttack = false;
+        LeanTween.scaleX(_attackBar, 0, 0);
         StartCoroutine(ShowSwordArea());
+        UpdateAttackHealthBar.Invoke();
 
         Collider2D[] objects = Physics2D.OverlapCircleAll(_attackSprite.transform.position, _radius);
 
@@ -64,7 +76,11 @@ public class PlayerAttack : MonoBehaviour
 
     public IEnumerator AttackCD(float attackCD)
     {
+        LeanTween.scaleX(_attackBar, 1, attackCD);
         yield return new WaitForSeconds(attackCD);
         _canAttack = true;
+        UpdateAttackHealthBar.Invoke();
     }
+
+    public bool GetAttackStatus() { return _canAttack; }
 }

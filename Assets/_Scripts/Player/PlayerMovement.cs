@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using DentedPixel;
 
@@ -26,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private GameObject _dashBar;
 
+    public UnityEvent UpdateMovementHealthBar;
+
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -33,6 +36,10 @@ public class PlayerMovement : MonoBehaviour
         _itemSource = GameObject.Find("Items SFX").GetComponent<AudioSource>();
         _movementSource = GameObject.Find("Movement SFX").GetComponent<AudioSource>();
         _inventoryScript = GetComponent<FullInventory>();
+        if (UpdateMovementHealthBar == null)
+        {
+            UpdateMovementHealthBar = new UnityEvent();
+        }
     }
 
     // Update is called once per frame
@@ -70,6 +77,8 @@ public class PlayerMovement : MonoBehaviour
         Physics2D.IgnoreLayerCollision(9, 7, true);
         Physics2D.IgnoreLayerCollision(9, 6, true);
         _speed *= _dashSpeed;
+        LeanTween.scaleX(_dashBar, 0, 0.05f);
+        UpdateMovementHealthBar.Invoke();
         StartCoroutine(DashTime(_dashTime));
     }
 
@@ -79,17 +88,15 @@ public class PlayerMovement : MonoBehaviour
         _speed /= _dashSpeed;
         Physics2D.IgnoreLayerCollision(9, 7, false);
         Physics2D.IgnoreLayerCollision(9, 6, false);
-
-        LeanTween.scaleX(_dashBar, 0, dashDuration);
-
         StartCoroutine(DashCD(_dashCD));
     }
 
     private IEnumerator DashCD(float dashCD) //Dash cooldown time.
     {
+        LeanTween.scaleX(_dashBar, 1, dashCD);
         yield return new WaitForSeconds(dashCD);
         _canDash = true;
-        LeanTween.scaleX(_dashBar, 1, dashCD);
+        UpdateMovementHealthBar.Invoke();
     }
 
     private void ManageMovement()
@@ -161,4 +168,6 @@ public class PlayerMovement : MonoBehaviour
     {
         _dust.Play();
     }
+
+    public bool GetDashStatus() { return _canDash; }
 }
