@@ -51,21 +51,21 @@ public class HUD : MonoBehaviour
         var canAttack = _player.GetComponent<PlayerAttack>().GetAttackStatus();
         var canDash = _player.GetComponent<PlayerMovement>().GetDashStatus();
         var healthBar = GameObject.Find("Player values").GetComponent<Image>();
-        if (!canDash && !canAttack)
-        {
-            healthBar.sprite = _healthBars[3];
-        }
-        else if (canDash && canAttack)
-        {
-            healthBar.sprite = _healthBars[2];
-        }
-        else if (!canDash && canAttack)
+        if (!canDash && canAttack)
         {
             healthBar.sprite = _healthBars[0];
         }
         else if (canDash && !canAttack)
         {
             healthBar.sprite = _healthBars[1];
+        }
+        else if (canDash && canAttack)
+        {
+            healthBar.sprite = _healthBars[2];
+        }
+        else if (!canDash && !canAttack)
+        {
+            healthBar.sprite = _healthBars[3];
         }
     }
 }

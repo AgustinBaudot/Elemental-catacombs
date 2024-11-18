@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Cinemachine;
 
 public class Enemy : MonoBehaviour
@@ -10,6 +11,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected GameObject _player;
     protected float _attackCD;
     private SpriteRenderer _spriteRenderer;
+    private GameStateManager _stateManager;
     protected enum EnemyState { Idle, Persuing, Attacking };
 
     [Header("Enemy Characteristics")]
@@ -22,6 +24,8 @@ public class Enemy : MonoBehaviour
     private bool _isHealing = false;
     private float _healAmount;
     private float _healCD = 1;
+
+    public UnityEvent Death;
 
     public virtual void Init()
     {
@@ -36,6 +40,7 @@ public class Enemy : MonoBehaviour
         _impulseSource = GetComponent<CinemachineImpulseSource>();
         Init();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _stateManager = GameObject.Find("GameStateManager").GetComponent<GameStateManager>();
     }
 
     protected void Update()
@@ -110,6 +115,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void Dies()
     {
+        _stateManager.EnemyDeath(gameObject);
         Destroy(gameObject);
     }
 

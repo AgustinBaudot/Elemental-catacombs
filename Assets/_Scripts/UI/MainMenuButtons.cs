@@ -10,11 +10,6 @@ public class MainMenuButtons : MonoBehaviour
     [SerializeField] private Fade _fadeScript;
     [SerializeField] private Image _image;
 
-    private void Start()
-    {
-        _fadeScript.FadeIn();
-    }
-
     public void Play()
     {
         _fadeScript.FadeOut();

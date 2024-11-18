@@ -15,7 +15,7 @@ public class PlayerHealth : MonoBehaviour
 
     public GameStateManager _gameStateManager;
     private bool _isDead;
-    private AudioSource _combatSource, _itemSource;
+    [SerializeField] private AudioSource _combatSource, _itemSource;
     private CinemachineImpulseSource _impulseSource;
     private FullInventory _inventoryScript;
 
@@ -27,8 +27,6 @@ public class PlayerHealth : MonoBehaviour
         {
             Dead = new UnityEvent();
         }
-        _combatSource = GameObject.Find("Combat SFX").GetComponent<AudioSource>();
-        _itemSource = GameObject.Find("Items SFX").GetComponent<AudioSource>();
         _impulseSource = GetComponent<CinemachineImpulseSource>();
         _inventoryScript = GetComponent<FullInventory>();
     }

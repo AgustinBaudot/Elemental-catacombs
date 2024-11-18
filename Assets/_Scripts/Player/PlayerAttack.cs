@@ -10,7 +10,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float _radius, _attackCD;
     [SerializeField] private AudioClip _attackClip, _attackHitClip;
     [SerializeField] private float _knockbackForce;
-    private AudioSource _source;
+    [SerializeField] private AudioSource _source;
     private bool _canAttack = true;
 
     [SerializeField] private GameObject _attackBar;
@@ -19,7 +19,6 @@ public class PlayerAttack : MonoBehaviour
 
     private void Start()
     {
-        _source = GameObject.Find("Combat SFX").GetComponent<AudioSource>();
         if (UpdateAttackHealthBar == null)
         {
             UpdateAttackHealthBar = new UnityEvent();
@@ -52,10 +51,6 @@ public class PlayerAttack : MonoBehaviour
                 Vector2 direction = (enemyGameobject.transform.position - transform.position).normalized; //Offset for direction of knockback
 
                 Vector2 knockback = direction * _knockbackForce;
-
-                Debug.Log(knockback);
-
-                Debug.Log(_knockbackForce);
 
                 enemyGameobject.gameObject.GetComponent<Enemy>().ReceiveDamage(10, Vector2.zero);
 

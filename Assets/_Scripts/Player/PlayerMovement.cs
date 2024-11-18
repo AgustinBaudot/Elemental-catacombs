@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool _canDash = true;
 
-    private AudioSource _itemSource, _movementSource;
+    [SerializeField] private AudioSource _itemSource, _movementSource;
 
     private FullInventory _inventoryScript;
 
@@ -33,8 +33,6 @@ public class PlayerMovement : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
-        _itemSource = GameObject.Find("Items SFX").GetComponent<AudioSource>();
-        _movementSource = GameObject.Find("Movement SFX").GetComponent<AudioSource>();
         _inventoryScript = GetComponent<FullInventory>();
         if (UpdateMovementHealthBar == null)
         {

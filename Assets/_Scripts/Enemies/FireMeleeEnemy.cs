@@ -51,9 +51,4 @@ public class FireMeleeEnemy : Enemy
         _enemyState = EnemyState.Persuing;
         _canAttack = true;
     }
-
-    //public void OnDrawGizmosSelected()
-    //{
-    //    Gizmos.DrawSphere(transform.position, 1f);
-    //}
 }

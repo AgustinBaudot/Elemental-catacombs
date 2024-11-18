@@ -8,6 +8,11 @@ public class Fade : MonoBehaviour
 {
     [SerializeField] private Image _fade;
 
+    private void Start()
+    {
+        FadeIn();
+    }
+
     public void FadeIn()
     {
         StartCoroutine(FadeImage(true));

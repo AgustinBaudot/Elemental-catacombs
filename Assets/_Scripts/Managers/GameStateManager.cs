@@ -5,8 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class GameStateManager : MonoBehaviour
 {
+    
     private List<GameObject> _enemies = new List<GameObject>();
     [SerializeField] private GameObject _gameOverScreen, _winScreen;
+    [SerializeField] private Fade _fadeScript;
 
     private void Start()
     {
@@ -14,7 +16,6 @@ public class GameStateManager : MonoBehaviour
         {
             _enemies.Add(objet);
         }
-
     }
 
     private void Update()
@@ -37,11 +38,24 @@ public class GameStateManager : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        _fadeScript.FadeOut();
+        StartCoroutine(ChangeScene(SceneManager.GetActiveScene().buildIndex));
     }
 
     public void MainMenu()
     {
-        SceneManager.LoadScene("Main menu");
+        _fadeScript.FadeOut();
+        StartCoroutine(ChangeScene(0));
+    }
+
+    private IEnumerator ChangeScene(int index)
+    {
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(index);
+    }
+
+    public void EnemyDeath(GameObject enemy)
+    {
+        _enemies.Remove(enemy);
     }
 }
