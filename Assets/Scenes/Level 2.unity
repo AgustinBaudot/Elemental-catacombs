@@ -5609,7 +5609,7 @@ PrefabInstance:
       objectReference: {fileID: 1051901394}
     - target: {fileID: 4895652861312770283, guid: 24806e01eb8f3c244953c69b80f9c317, type: 3}
       propertyPath: _lootTable.Array.data[0].dropChance
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17711,7 +17711,7 @@ PrefabInstance:
       objectReference: {fileID: 1051901394}
     - target: {fileID: 4895652861312770283, guid: 24806e01eb8f3c244953c69b80f9c317, type: 3}
       propertyPath: _lootTable.Array.data[0].dropChance
-      value: 0.25
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -23800,7 +23800,7 @@ PrefabInstance:
       objectReference: {fileID: 1051901394}
     - target: {fileID: 4895652861312770283, guid: 24806e01eb8f3c244953c69b80f9c317, type: 3}
       propertyPath: _lootTable.Array.data[0].dropChance
-      value: 0.25
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
