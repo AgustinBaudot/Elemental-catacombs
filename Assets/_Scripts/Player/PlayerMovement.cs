@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using DentedPixel;
@@ -146,6 +147,8 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Loot"))
         {
             _potions++;
+            if (_potions == 1 && SceneManager.GetActiveScene().name == "Level 2") GameObject.Find("Instructions").GetComponent<Instructions>().Level2();
+            else if (_potions >= 3 && SceneManager.GetActiveScene().name == "Level 2") GameObject.Find("Instructions").GetComponent<Instructions>().Level2();
             Destroy(collision.gameObject);
             _hud.UpdatePotions(_potions);
             _inventoryScript.UpdatePotions(_potions);

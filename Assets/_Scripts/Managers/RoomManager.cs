@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RoomManager : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class RoomManager : MonoBehaviour
     [SerializeField] private GameObject _player;
     private Transform _closest;
     private bool _closed = false;
+    public UnityEvent RoomChanged;
 
     private void Awake()
     {
@@ -23,7 +25,15 @@ public class RoomManager : MonoBehaviour
         {
             Destroy(this);
         }
-        _closest = GameObject.Find("Central grid").transform;
+        _closest = _rooms[0]; //Change this to be: _closest = rooms[roomsclosed[the only one that is true]];
+    }
+
+    private void Start()
+    {
+        if (RoomChanged == null)
+        {
+            RoomChanged = new UnityEvent();
+        }
     }
 
     private void Update()
@@ -43,6 +53,11 @@ public class RoomManager : MonoBehaviour
         {
             if (Vector2.Distance(roomTransform.position, _player.transform.position) < Vector2.Distance(_closest.position, _player.transform.position))
             {
+                if (_closest != roomTransform)
+                {
+                    Debug.Log("Event");
+                    RoomChanged.Invoke();
+                }
                 _closest = roomTransform;
             }
         }
@@ -56,4 +71,6 @@ public class RoomManager : MonoBehaviour
     }
 
     public bool IsClosed() { return _closed; }
+
+    public GameObject GetCurrentRoom() { return _closest.gameObject; }
 }

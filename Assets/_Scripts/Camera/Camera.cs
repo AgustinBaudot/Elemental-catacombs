@@ -17,6 +17,7 @@ public class Camera : MonoBehaviour
         {
             PlayerMoved = new UnityEvent();
         }
+
     }
 
     public void MoveCamera(Vector2 direction)

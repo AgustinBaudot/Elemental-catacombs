@@ -13,13 +13,13 @@ public class MainMenuButtons : MonoBehaviour
     public void Play()
     {
         _fadeScript.FadeOut();
-        StartCoroutine(ChangeScene(1));
+        StartCoroutine(ChangeScene(2));
     }
 
     public void Options()
     {
         _fadeScript.FadeOut();
-        StartCoroutine(ChangeScene(2));
+        StartCoroutine(ChangeScene(1));
     }
 
     public void Exit()

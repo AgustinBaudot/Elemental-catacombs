@@ -48,6 +48,17 @@ public class GameStateManager : MonoBehaviour
         StartCoroutine(ChangeScene(0));
     }
 
+    public void NextLevel()
+    {
+        if (SceneManager.GetActiveScene().name == "Level 3")
+        {
+            MainMenu(); // If player won third level, send him to main menu;
+            return;
+        }
+        _fadeScript.FadeOut();
+        StartCoroutine(ChangeScene(SceneManager.GetActiveScene().buildIndex + 1));
+    }
+
     private IEnumerator ChangeScene(int index)
     {
         yield return new WaitForSeconds(1);
