@@ -53,12 +53,8 @@ public class RoomManager : MonoBehaviour
         {
             if (Vector2.Distance(roomTransform.position, _player.transform.position) < Vector2.Distance(_closest.position, _player.transform.position))
             {
-                if (_closest != roomTransform)
-                {
-                    Debug.Log("Event");
-                    RoomChanged.Invoke();
-                }
                 _closest = roomTransform;
+                RoomChanged.Invoke();
             }
         }
 
