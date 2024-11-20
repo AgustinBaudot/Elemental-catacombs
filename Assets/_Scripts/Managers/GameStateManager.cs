@@ -33,6 +33,7 @@ public class GameStateManager : MonoBehaviour
 
     public void Lose()
     {
+        GameObject.Find("HUD").SetActive(false);
        _gameOverScreen.SetActive(true);
     }
 
