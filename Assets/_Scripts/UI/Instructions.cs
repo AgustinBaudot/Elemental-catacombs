@@ -32,7 +32,6 @@ public class Instructions : MonoBehaviour
         }
         else if (RoomManager._instance.GetCurrentRoom().name == "Central grid")
         {
-            Debug.Log("Hola");
             if (_co != null) StopCoroutine(_co);
             _instructionsFrame.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Oh no, an enemy!\nUse left click to defeat him!";
             _instructionsFrame.gameObject.SetActive(true);

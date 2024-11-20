@@ -45,6 +45,7 @@ public class GameStateManager : MonoBehaviour
 
     public void MainMenu()
     {
+        Destroy(GameObject.Find("DDOL"));
         _fadeScript.FadeOut();
         StartCoroutine(ChangeScene(0));
     }

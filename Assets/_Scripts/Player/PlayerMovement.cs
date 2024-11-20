@@ -35,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
         _inventoryScript = GetComponent<FullInventory>();
+        _itemSource = GameObject.Find("Items SFX").GetComponent<AudioSource>();
+        _movementSource = GameObject.Find("Movement SFX").GetComponent<AudioSource>();
         if (UpdateMovementHealthBar == null)
         {
             UpdateMovementHealthBar = new UnityEvent();

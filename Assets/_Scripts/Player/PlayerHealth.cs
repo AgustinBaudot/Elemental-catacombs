@@ -23,12 +23,14 @@ public class PlayerHealth : MonoBehaviour
     private void Start()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _impulseSource = GetComponent<CinemachineImpulseSource>();
+        _inventoryScript = GetComponent<FullInventory>();
+        _combatSource = GameObject.Find("Combat SFX").GetComponent<AudioSource>();
+        _itemSource = GameObject.Find("Items SFX").GetComponent<AudioSource>();
         if (Dead == null)
         {
             Dead = new UnityEvent();
         }
-        _impulseSource = GetComponent<CinemachineImpulseSource>();
-        _inventoryScript = GetComponent<FullInventory>();
     }
 
     private void Update()

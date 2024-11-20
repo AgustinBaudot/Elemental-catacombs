@@ -19,6 +19,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void Start()
     {
+        _source = GameObject.Find("Combat SFX").GetComponent<AudioSource>();
         if (UpdateAttackHealthBar == null)
         {
             UpdateAttackHealthBar = new UnityEvent();
